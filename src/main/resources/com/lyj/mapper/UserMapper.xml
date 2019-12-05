@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lyj.dao.UserDao">
+    <select id="rangeByTime" resultType="java.lang.Integer">
+        select count(*)
+        from user
+        where sex=#{sex}
+        and SUBDATE(NOW(),INTERVAL #{day} DAY) &lt; registration_date
+    </select>
+    <select id="AddressAndCount" resultType="MapVO">
+        select address name,count(*) value
+        from user
+        GROUP BY address
+    </select>
+</mapper>
