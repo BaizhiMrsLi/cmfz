@@ -4,6 +4,8 @@ import com.lyj.entity.Guru;
 import com.lyj.service.GuruService;
 import com.lyj.util.PhotoUpload;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.SetOperations;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -120,12 +122,26 @@ public class GuruController {
         guruService.update(guru);
     }
 
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+    
     @RequestMapping("queryAll")
     public Map queryAll(String uid){
         Map map = new HashMap();
         List<Guru> gurus = guruService.findAllGuru();
+        SetOperations<String, String> set = stringRedisTemplate.opsForSet();
+        Set<String> members = set.members("focus" + uid);
+        List<Guru> FocusGurus = new ArrayList<>();
+        for (String member : members) {
+            Guru guru = new Guru();
+            guru.setId(member);
+            FocusGurus.add(guruService.selectById(guru));
+        }
+
         map.put("status","200");
         map.put("gurus",gurus);
+        map.put("FocusGurus",FocusGurus);
+        
         return map;
     }
 }

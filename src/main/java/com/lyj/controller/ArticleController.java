@@ -7,8 +7,6 @@ import com.lyj.service.GuruService;
 import com.lyj.util.PhotoUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.SetOperations;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -165,16 +163,10 @@ public class ArticleController {
     }
 
 
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
     @RequestMapping("selArticleById")
     public Map selArticleById(String uid,Article article){
         Map map = new HashMap();
-        SetOperations<String, String> set = stringRedisTemplate.opsForSet();
         article = articleService.selectById(article);
-        //用户看过的文章，需要进行redis保存，找金刚道友做准备
-        set.add("uid"+uid,article.getId());
-        set.add("article"+article.getId(),uid);
         map.put("status","200");
         map.put("article",article);
         return map;

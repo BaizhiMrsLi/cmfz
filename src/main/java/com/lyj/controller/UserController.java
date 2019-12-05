@@ -208,7 +208,12 @@ public class UserController {
         SetOperations<String, String> set = stringRedisTemplate.opsForSet();
         //关注上师
         set.add("focus"+uid,id);
+        set.add("fans"+id,uid);
+
+        Set<String> members = set.members("focus" + uid);
+
         map.put("status","200");
+        map.put("gurus",members);
         return map;
     }
 
@@ -218,7 +223,12 @@ public class UserController {
         SetOperations<String, String> set = stringRedisTemplate.opsForSet();
         //取消关注上师
         set.remove("focus"+uid,id);
+        set.remove("fans"+id,uid);
+
+        Set<String> members = set.members("focus" + uid);
+
         map.put("status","200");
+        map.put("gurus",members);
         return map;
     }
 
