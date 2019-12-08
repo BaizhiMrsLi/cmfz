@@ -14,5 +14,4 @@ public class CmfzApplication {
         SpringApplication.run(CmfzApplication.class, args);
     }
 
-
 }

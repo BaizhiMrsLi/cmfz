@@ -52,6 +52,7 @@ public class BannerController {
     @RequestMapping("opt")
     public Map<String, String> edit(Banner banner, String oper,HttpServletRequest request) {
         Map<String, String> map = new HashMap<>();
+        System.out.println("此时：" + banner);
         if ("add".equals(oper)) {
             try {
                 banner.setId(null);
@@ -118,6 +119,7 @@ public class BannerController {
         Banner b = new Banner();
         b.setId(id);
         Banner banner = bannerService.selectById(b);
+        System.out.println("修改图片" + banner);
         //判断是否上传空图片
         if (aa.getSize() == 0) {
             banner.setCover(banner.getCover());
