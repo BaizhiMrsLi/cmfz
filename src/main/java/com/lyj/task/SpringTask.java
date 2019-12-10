@@ -10,6 +10,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
+/*
+ * 自动计时器
+ */
+
 
 @Component
 @Async
@@ -17,6 +21,7 @@ public class SpringTask {
     @Autowired
     private UserService userService;
 
+    //cron = "0 0 12 ? * SUN"：每周日中午12点备份
     @Scheduled(cron = "0 0 12 ? * SUN")
     public void task(){
         String fileName = "C:\\Users\\Administrator\\Desktop\\Demo\\"+new Date().getTime()+"_用户信息.xlsx";

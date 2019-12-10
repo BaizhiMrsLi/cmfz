@@ -25,20 +25,27 @@
             captchaImg.src='${pageContext.request.contextPath}/captcha/captcha?'+Math.random();
         }
         function login() {
-            $.ajax({
-                url:"${pageContext.request.contextPath}/admin/login",
-                type:"POST",
-                datatype:"JSON",
-                data:$("#loginForm").serialize(),
-                success:function (data) {
-                    if (data!=null&data!=""){
-                        $("#msg").html("<span class='error'>"+data+"</span>");
-                    }else {
-                        location.href = "${pageContext.request.contextPath}/back/main.jsp";
+            var username = $('#username').val();
+            var password = $('#password').val();
+            var yzm = $('#yzm').val();
+            if (username == "" || password == "" || yzm == "") {
+                $("#msg").html("<span class='error'>请把信息输入完整！</span>");
+            } else {
+                $.ajax({
+                    url: "${pageContext.request.contextPath}/admin/login",
+                    type: "POST",
+                    datatype: "JSON",
+                    data: $("#loginForm").serialize(),
+                    success: function (data) {
+                        if (data != null & data != "") {
+                            $("#msg").html("<span class='error'>" + data + "</span>");
+                        } else {
+                            location.href = "${pageContext.request.contextPath}/back/main.jsp";
+                        }
                     }
-                }
 
-            })
+                });
+            }
         }
     </script>
 </head>
@@ -53,13 +60,15 @@
         <form id="loginForm" method="post" action="javascript:;">
         <div class="modal-body" id = "model-body">
             <div class="form-group">
-                <input type="text" class="form-control"placeholder="用户名" autocomplete="off" name="username">
+                <input type="text" class="form-control" placeholder="用户名" autocomplete="off" id="username"
+                       name="username">
             </div>
             <div class="form-group">
-                <input type="password" class="form-control" placeholder="密码" autocomplete="off" name="password">
+                <input type="password" class="form-control" placeholder="密码" autocomplete="off" id="password"
+                       name="password">
             </div>
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="验证码" autocomplete="off" name="captcha">
+                <input type="text" class="form-control" placeholder="验证码" autocomplete="off" id="yzm" name="captcha">
             </div>
             <div class="form-group">
                 验证码:

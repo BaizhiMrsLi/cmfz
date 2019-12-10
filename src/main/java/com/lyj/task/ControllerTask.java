@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.List;
 
+/*
+    在controller里面调用run进行计时
+* */
 @Component
 public class ControllerTask {
     @Autowired
@@ -37,6 +40,7 @@ public class ControllerTask {
         };
         threadPoolTaskScheduler.schedule(runnable,new CronTrigger("0/30 * * * * *"));
     }
+
     public void shutdown(){
         threadPoolTaskScheduler.shutdown();
     }

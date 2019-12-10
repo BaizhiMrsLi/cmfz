@@ -18,4 +18,16 @@ public class AdminServiceImpl implements AdminService {
     public Admin AdminLogin(Admin admin) {
         return adminDao.selectOne(admin);
     }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public Admin queryPermissions(String username) {
+        return adminDao.queryPermissions(username);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public Admin selectOne(Admin admin) {
+        return adminDao.selectOne(admin);
+    }
 }

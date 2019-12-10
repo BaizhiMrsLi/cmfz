@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lyj.dao.AdminDao">
+
+    <resultMap id="resAdmin" type="Admin">
+        <id property="id" column="aid"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <collection property="roles" ofType="Role">
+            <id property="id" column="rid"/>
+            <result property="role_name" column="role_name"/>
+            <collection property="resources" ofType="Resource">
+                <id property="id" column="reid"/>
+                <result property="resource_name" column="resource_name"/>
+            </collection>
+        </collection>
+    </resultMap>
+    <select id="queryPermissions" resultMap="resAdmin">
+        select a.id aid,username,password,c.id rid,role_name,e.id reid,resource_name
+        from admin a LEFT JOIN admin_role b on a.id = b.a_id
+        LEFT JOIN role c on b.role_id = c.id
+        LEFT JOIN role_resource d on c.id = d.role_id
+        LEFT JOIN resource e on d.resource_id = e.id
+        where username = #{username}
+    </select>
+</mapper>

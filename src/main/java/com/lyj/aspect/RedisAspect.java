@@ -47,14 +47,16 @@ public class RedisAspect {
             System.out.println("从redis中获取的数据");
             return o;
         }
-        //从数据库中获取数据放到redis
+        //执行该被切的方法
         Object proceed = proceedingJoinPoint.proceed();
+        //从数据库中获取数据放到redis
         hash.put(clazzName, key, proceed);
         return proceed;
     }
 
     @Around("@annotation(com.lyj.annotation.RedisDelAnnotation)")
     public Object delRedis(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        //执行该被切的方法
         Object proceed = proceedingJoinPoint.proceed();
         System.out.println("come in delRedis");
         String clazzName = proceedingJoinPoint.getSignature().getDeclaringTypeName();

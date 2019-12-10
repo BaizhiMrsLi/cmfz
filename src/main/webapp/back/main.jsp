@@ -1,4 +1,5 @@
 <%@ page isELIgnored="false" pageEncoding="UTF-8" contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,18 +30,7 @@
     <script type="text/javascript" src="http://cdn.goeasy.io/goeasy-1.0.3.js"></script>
 
     <script>
-        // $(function () {
-        //    Mustlogin();
-        // });
 
-        <%--// 强制登录--%>
-        <%--function Mustlogin() {--%>
-        <%--    var n = '${sessionScope.admin.username}';--%>
-        <%--    console.log(n);--%>
-        <%--    if(n == ''){--%>
-        <%--        location.href = "${pageContext.request.contextPath}/back/login.jsp";--%>
-        <%--    }--%>
-        <%--}--%>
         //安全退出
         function safeOut() {
             $.ajax({
@@ -91,7 +81,8 @@
         <div>
             <!--向右对齐-->
             <a href="javascript:;" class="navbar-text navbar-right" onclick="safeOut()" style="text-decoration: none">退出登录&nbsp;&nbsp;&nbsp;&nbsp;</a>
-            <p class="navbar-text navbar-right">欢迎-${sessionScope.admin.username}!</p>
+            <p class="navbar-text navbar-right">欢迎-<span style="color: red;"><shiro:principal></shiro:principal></span>!
+            </p>
         </div>
     </div>
 </nav>
@@ -112,13 +103,16 @@
                     <div id="collapseOne" class="panel-collapse collapse">
                         <div class="panel-body">
                             <div class="list-group">
-                                <a href="javascript:$('#content').load('${pageContext.request.contextPath}/back/user.jsp');" class="list-group-item">
+                                <a href="javascript:$('#content').load('${pageContext.request.contextPath}/back/user.jsp');"
+                                   class="list-group-item">
                                     用户列表
                                 </a>
-                                <a href="javascript:$('#content').load('${pageContext.request.contextPath}/back/userRegist.jsp');" class="list-group-item">
+                                <a href="javascript:$('#content').load('${pageContext.request.contextPath}/back/userRegist.jsp');"
+                                   class="list-group-item">
                                     用户注册趋势图
                                 </a>
-                                <a href="javascript:$('#content').load('${pageContext.request.contextPath}/back/userMap.jsp');" class="list-group-item">
+                                <a href="javascript:$('#content').load('${pageContext.request.contextPath}/back/userMap.jsp');"
+                                   class="list-group-item">
                                     地理分布图
                                 </a>
                             </div>
