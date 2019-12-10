@@ -23,4 +23,14 @@
         LEFT JOIN resource e on d.resource_id = e.id
         where username = #{username}
     </select>
+    <select id="findAll" resultMap="resAdmin">
+        select a.id aid,username,password,c.id rid,role_name,e.id reid,resource_name
+        from (select * from admin limit #{start},#{size}) a LEFT JOIN admin_role b on a.id = b.a_id
+        LEFT JOIN role c on b.role_id = c.id
+        LEFT JOIN role_resource d on c.id = d.role_id
+        LEFT JOIN resource e on d.resource_id = e.id
+    </select>
+    <select id="findAllCount" resultType="Integer">
+        select count(id) from admin
+    </select>
 </mapper>

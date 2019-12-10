@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -29,5 +31,17 @@ public class AdminServiceImpl implements AdminService {
     @Transactional(propagation = Propagation.SUPPORTS)
     public Admin selectOne(Admin admin) {
         return adminDao.selectOne(admin);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public List<Admin> findAll(Integer start, Integer size) {
+        return adminDao.findAll(start, size);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public Integer findAllCount() {
+        return adminDao.findAllCount();
     }
 }

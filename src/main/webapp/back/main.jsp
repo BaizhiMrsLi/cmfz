@@ -195,6 +195,28 @@
                         </div>
                     </div>
                 </div>
+                <shiro:hasRole name="superadmin">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion"
+                                   href="#collapseSix">
+                                    管理员管理
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseSix" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <div class="list-group">
+                                    <a href="javascript:$('#content').load('${pageContext.request.contextPath}/back/admin.jsp');"
+                                       class="list-group-item">
+                                        管理员列表
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </shiro:hasRole>
             </div>
         </div>
         <%--        右侧部分--%>

@@ -7,19 +7,15 @@ import tk.mybatis.mapper.annotation.KeySql;
 import tk.mybatis.mapper.code.ORDER;
 
 import javax.persistence.Id;
-import javax.persistence.Transient;
 import java.io.Serializable;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Role implements Serializable {
+public class AdminRole implements Serializable {
     @Id
     @KeySql(sql = "select uuid()", order = ORDER.BEFORE)
     private String id;
-    private String role_name;
-
-    @Transient
-    private List<Resource> resources;
+    private String a_id;
+    private String role_id;
 }
