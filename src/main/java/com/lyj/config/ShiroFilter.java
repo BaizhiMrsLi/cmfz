@@ -31,6 +31,8 @@ public class ShiroFilter {
         linkedHashMap.put("/upload/**", "anon");
         // 将登陆方法 放行
         linkedHashMap.put("/admin/login", "anon");
+        // 将用户方法 放行
+        linkedHashMap.put("/user/**", "anon");
         //将生成验证码也放行
         linkedHashMap.put("/captcha/captcha", "anon");
         //默认拦截所有，都需要认证，由于是链式，所以最后执行

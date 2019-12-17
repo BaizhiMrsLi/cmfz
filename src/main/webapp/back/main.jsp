@@ -153,6 +153,10 @@
                                 <a href="javascript:$('#content').load('${pageContext.request.contextPath}/back/article.jsp');" class="list-group-item">
                                     文章列表
                                 </a>
+                                <a href="javascript:$('#content').load('${pageContext.request.contextPath}/back/esarticle.jsp');"
+                                   class="list-group-item">
+                                    文章搜索
+                                </a>
                             </div>
                         </div>
                     </div>

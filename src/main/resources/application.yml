@@ -6,7 +6,6 @@ server:
       init-parameters:
         development: true
 
-
 spring:
   mvc:
     view:
@@ -22,6 +21,9 @@ spring:
     multipart:
       max-file-size: 40MB
       max-request-size: 20MB
+  data:
+    elasticsearch:
+      cluster-nodes: 192.168.94.136:9300
   redis:
     host: 49.233.185.109
     port: 7000

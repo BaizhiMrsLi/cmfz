@@ -1,18 +1,25 @@
 package com.lyj.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.lyj.entity.MapVO;
 import com.lyj.entity.User;
 import com.lyj.service.UserService;
 import com.lyj.util.MD5Utils;
 import com.lyj.util.Number6;
 import com.lyj.util.SendMessage;
+import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.jms.annotation.JmsListener;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
+import javax.jms.JMSException;
+import javax.jms.TextMessage;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -24,6 +31,9 @@ public class UserController {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    @Resource
+    JmsTemplate jmsTemplate;
 
     @RequestMapping("findAll")
     public Map<String, Object> findAll(String searchField, String searchString, String searchOper, Integer page, Integer rows, Boolean _search) {
@@ -128,6 +138,12 @@ public class UserController {
                     userService.save(user);
                     map.put("status","200");
                     map.put("message","success");
+                    //手机号入库之后，发送消息
+                    ActiveMQQueue springbootQueue = new ActiveMQQueue("cmfzUserRegist");
+                    Map m = new HashMap();
+                    m.put("tel", user.getTel());
+                    String s = JSONArray.toJSON(m).toString();
+                    jmsTemplate.convertAndSend(springbootQueue, s);
                 }else {
                     map.put("status","-200");
                     map.put("message","验证码错误!");
@@ -138,6 +154,19 @@ public class UserController {
             }
         }
         return map;
+    }
+
+    @JmsListener(destination = "cmfzUserRegist")
+    public void Consumers(TextMessage msg) {
+        try {
+            System.out.println("come in ");
+            System.out.println("json:" + msg.getText());
+            Map map = JSONArray.parseObject(msg.getText());
+            String message = SendMessage.sendSuccessMessage(map.get("tel").toString(), map.get("tel").toString());
+            System.out.println("状态:" + message);
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
     }
 
     @RequestMapping("updUser")
@@ -229,6 +258,33 @@ public class UserController {
 
         map.put("status","200");
         map.put("gurus",members);
+        return map;
+    }
+
+    @RequestMapping("friends")
+    public Map friends(String uid) {
+        Map map = new HashMap();
+        SetOperations<String, String> set = stringRedisTemplate.opsForSet();
+        //从redis中随机取两位上师id
+        Set<String> strings = set.distinctRandomMembers("focus" + uid, 2);
+        List<String> list = new ArrayList<>();
+        for (String string : strings) {
+            list.add("fans" + string);
+        }
+        System.out.println("获取到的上师id集合：" + list);
+        Set<String> intersect = set.intersect(list);
+        System.out.println("获取到的用户交集：" + intersect);
+        intersect.remove(uid);
+        System.out.println("获取到的用户交集(去除本用户id)：" + intersect);
+        List<User> users = new ArrayList<>();
+        for (String s : intersect) {
+            User user = new User();
+            user.setId(s);
+            User u = userService.selectById(user);
+            users.add(u);
+        }
+        map.put("status", "200");
+        map.put("users", users);
         return map;
     }
 

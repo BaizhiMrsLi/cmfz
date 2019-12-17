@@ -1,7 +1,8 @@
 package com.lyj.aspect;
 
 import com.lyj.annotation.LogAnnotation;
-import com.lyj.entity.Admin;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -12,7 +13,6 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -38,8 +38,8 @@ public class LogAspect {
         BufferedWriter bw = new BufferedWriter( w );
 
         //获取当前的管理员
-        HttpSession session = request.getSession();
-        Admin admin = (Admin) session.getAttribute("admin");
+        Subject subject = SecurityUtils.getSubject();
+        Object admin = subject.getPrincipal();
         if (admin != null) {
             //当前时间
             Date date = new Date();
@@ -58,8 +58,8 @@ public class LogAspect {
             try {
                 Object proceed = proceedingJoinPoint.proceed();
                 status = "success";
-                String sb = "管理员:" + admin.getUsername() + "，在" + format + "时间操作了" + name + "方法，做了" + value + "，此操作的状态:" + status;
-                maps.put("持明法洲日志信息", admin.getUsername() + format, sb);
+                String sb = "管理员:" + admin.toString() + "，在" + format + "时间操作了" + name + "方法，做了" + value + "，此操作的状态:" + status;
+                maps.put("持明法洲日志信息", admin.toString() + format, sb);
                 bw.write(sb);//\n表示newLine \r 表示return \r\n   \r  \n
                 bw.newLine();//换行
                 bw.close();
@@ -68,8 +68,8 @@ public class LogAspect {
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
                 status = "error";
-                String sb = "管理员:" + admin.getUsername() + "，在" + format + "时间操作了" + name + "方法，做了" + value + "，此操作的状态:" + status;
-                maps.put("持明法洲日志信息", admin.getUsername() + format, sb);
+                String sb = "管理员:" + admin.toString() + "，在" + format + "时间操作了" + name + "方法，做了" + value + "，此操作的状态:" + status;
+                maps.put("持明法洲日志信息", admin.toString() + format, sb);
                 bw.write(sb);//\n表示newLine \r 表示return \r\n   \r  \n
                 bw.newLine();//换行
                 bw.close();

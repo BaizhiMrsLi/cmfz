@@ -119,6 +119,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+            <version>1.5.20.RELEASE</version>
+        </dependency>
+        <!--springboot-data-es依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
 
         <!--        easyexcel依赖-->
@@ -144,6 +150,23 @@
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-ehcache</artifactId>
             <version>1.4.2</version>
+        </dependency>
+        <!--        &lt;!&ndash;        activemq的java代码jar支持&ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.activemq</groupId>-->
+        <!--            <artifactId>activemq-core</artifactId>-->
+        <!--            <version>5.7.0</version>-->
+        <!--        </dependency>-->
+        <!--        activemq的spring支持-->
+        <!--        &lt;!&ndash;ActiveMQ相关jar包&ndash;&gt;-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-activemq</artifactId>
+        </dependency>
+        <!--        activeMQ的线程池-->
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-pool</artifactId>
         </dependency>
     </dependencies>
 

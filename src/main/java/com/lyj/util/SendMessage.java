@@ -27,6 +27,23 @@ public class SendMessage {
         return result;
     }
 
+    //tel:电话号       username:用户名
+    //返回值类型是string，是发送成功与否的信息。0:是发送成功，其余的是失败。
+    public static String sendSuccessMessage(String tel, String username) {
+        String testUsername = "mrsli"; //在短信宝注册的用户名
+        String testPassword = "luoyundanqing"; //在短信宝注册的密码
+        String testContent = "【持明法洲】尊敬的用户" + username + "：您的账户注册成功，请您及时登录！";
+        // 注意测试时，也请带上公司简称或网站签名，发送正规内容短信。千万不要发送无意义的内容：例如 测一下、您好。否则可能会收不到
+        String httpUrl = "http://api.smsbao.com/sms";
+        StringBuffer httpArg = new StringBuffer();
+        httpArg.append("u=").append(testUsername).append("&");
+        httpArg.append("p=").append(md5(testPassword)).append("&");
+        httpArg.append("m=").append(tel).append("&");
+        httpArg.append("c=").append(encodeUrlString(testContent, "UTF-8"));
+        String result = request(httpUrl, httpArg.toString());
+        return result;
+    }
+
     public static String request(String httpUrl, String httpArg) {
         BufferedReader reader = null;
         String result = null;
