@@ -3,6 +3,7 @@ package com.lyj.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.lyj.entity.MapVO;
 import com.lyj.entity.User;
+import com.lyj.service.MailServiceImpl;
 import com.lyj.service.UserService;
 import com.lyj.util.MD5Utils;
 import com.lyj.util.Number6;
@@ -121,6 +122,9 @@ public class UserController {
         return map;
     }
 
+    @Autowired
+    private MailServiceImpl mailService;
+
     @RequestMapping("registUser")
     public Map<String,Object> registUser(String code,User user){
         Map<String,Object> map = new HashMap<>();
@@ -138,10 +142,15 @@ public class UserController {
                     userService.save(user);
                     map.put("status","200");
                     map.put("message","success");
-                    //手机号入库之后，发送消息
+                    //手机号入库之后，发送消息.
                     ActiveMQQueue springbootQueue = new ActiveMQQueue("cmfzUserRegist");
                     Map m = new HashMap();
+
                     m.put("tel", user.getTel());
+
+                    m.put("toEmail", "875440649@qq.com");
+                    m.put("title", "【持明法洲】");
+                    m.put("content", "恭喜您注册成功！");
                     String s = JSONArray.toJSON(m).toString();
                     jmsTemplate.convertAndSend(springbootQueue, s);
                 }else {
@@ -162,8 +171,11 @@ public class UserController {
             System.out.println("come in ");
             System.out.println("json:" + msg.getText());
             Map map = JSONArray.parseObject(msg.getText());
+            //发送成功消息到手机
             String message = SendMessage.sendSuccessMessage(map.get("tel").toString(), map.get("tel").toString());
             System.out.println("状态:" + message);
+            //发送成功消息邮箱
+            mailService.sendHtmlMail(map.get("toEmail").toString(), map.get("title").toString(), map.get("content").toString());
         } catch (JMSException e) {
             e.printStackTrace();
         }
